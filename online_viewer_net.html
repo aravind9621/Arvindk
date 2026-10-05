@@ -1,10 +1,155 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>My first code</title>
+<html lang="en">
+<head>
+
+<title>Aravind Kumar Prajapati - Portfolio</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        
+    }
     
-  </head>
-  <body>
-      <h2>ARAVIND KUMAR PRAJAPATI</h2>
-  </body>
+    body {
+        background:white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+    }
+    
+    .card {
+        background: white;
+        width: 350px;
+        border-radius: 20px;
+        padding: 30px 25px;
+        text-align: center;
+        box-shadow: 0 10px 30px blue;
+    }
+    
+    .avatar {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 15px;
+        position: relative;
+    }
+    
+    .avatar img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid yellow;
+    }
+    
+    .butterfly {
+        position: absolute;
+        top: 5px;
+        left: 50%;
+        font-size: 18px;
+    }
+    
+    h2 {
+        color: green;
+        font-size: 22px;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+    }
+    
+    .title {
+        color: skyblue;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+    
+    .section {
+        text-align: left;
+        margin-bottom: 20px;
+    }
+    
+    .section h3 {
+        color: orange;
+        font-size: 18px;
+        margin-bottom: 10px;
+        border-left: 4px solid purple;
+        padding-left: 10px;
+    }
+    
+    .skills {
+        color: black;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+    
+    .projects ul {
+        list-style: none;
+        padding-left: 0;
+    }
+    
+    .projects li {
+        color: white;
+        font-size: 14px;
+        margin-bottom: 8px;
+        padding-left: 20px;
+        position: relative;
+    }
+    
+    .projects li:before {
+        content: "•";
+        color: red;
+        font-weight: bold;
+        position: absolute;
+        left: 0;
+    }
+    
+    .contact p {
+        color: black;
+        font-size: 13px;
+        margin-bottom: 8px;
+        word-break: break-all;
+    }
+    
+    .contact a {
+        color: blue;
+        text-decoration: none;
+    }
+    
+    .contact a:hover {
+        text-decoration: underline;
+    }
+</style>
+</head>
+<body>
+
+<div class="card">
+    <div class="avatar">
+        <span class="butterfly"></span>
+        <img src="https://i.ibb.co/23Nvmy7m/photo.jpg" alt="Aravind">
+    </div>
+    
+    <h2>Aravind Kumar Prajapati</h2>
+    <p class="title">B.Tech Information Technology </p>
+    
+    <div class="section skills">
+        <h3>Skills</h3>
+        <p>Python, HTML, CSS, JavaScript, basic SQL</p>
+    </div>
+    
+    <div class="section projects">
+        <h3>Projects</h3>
+        <ul>
+            
+        </ul>
+    </div>
+    
+    <div class="section contact">
+        <h3>Contact</h3>
+        <p><b>Email:</b> ak6374081@gmail.com</p>
+        <p><b>LinkedIn:</b> <a href="https://www.linkedin.com/in/aravind-kumar-prajapati-978247340" target="_blank">aravind-kumar-prajapati</a></p>
+    </div>
+</div>
+
+</body>
 </html>
