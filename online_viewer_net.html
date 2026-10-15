@@ -1,138 +1,115 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Responsive Profile Cards</title>
+  <title>My Counter App</title>
   <style>
-    body{
+    * {
       margin: 0;
-      padding: 32px 16px;
+      padding: 0;
+      box-sizing: border-box;
       font-family:Verdana;
-      color: black;
+    }
+    body {
+      margin: 50px 0px 0px 0px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+    }
+    .container {
       background: Pink;
-    }
-    h1{
-      margin: 0 0 24px;
+      padding: 40px;
+      border-radius: 20px;
       text-align: center;
+      box-shadow: 0 10px 30px gray;
+      width: 90%;
+      max-width: 420px;
     }
-    .card-section {
-      max-width: 1000px;
-      margin: 0 auto;
+    h1 {
+      margin-bottom: 25px;
+      color: black;
     }
-  .card-container {
+    #counter {
+      font-size: 70px;
+      font-weight: bold;
+      margin-bottom: 30px;
+      color: black;
+    }
+    .buttons {
       display: flex;
       flex-wrap: wrap;
+      gap: 12px;
       justify-content: center;
-      align-items: stretch;
-      gap: 20px;
     }
-    .profile-card {
-      width: 280px;
-      padding: 24px;
-      text-align: center;
-      background: white;
-      box-shadow: 0 4px 14px gray;
-    }
-    .profile-card img {
-      width: 110px;
-      height: 110px;
-      object-fit: cover;
-    }
-    .profile-card h2 {
-      margin: 14px 0 6px;
-      font-size: 20px;
-    }
-    .profile-card p {
-      margin: 8px 0;
-      line-height: 15px;
-    }
-    .role {
-      color: gray;
-    }
-    .profile-card a,
-    .show-button {
-      display: inline-block;
-      margin-top: 12px;
-      padding: 10px 16px;
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
       color: white;
-      background: blue;
-      border: 0;
-      font: inherit;
-      text-decoration: none;
     }
-    .show-button {
-      display: block;
-      margin: 24px auto 0;
+    .increase {
+      background:skyblue;
     }
-    .extra-card {
-      display: none;
+    .decrease {
+      background: yellow;
     }
-    .extra-card.visible {
-      display: block;
-    }
-    .dark {
-      color: green;
-      background:red;
-    }
-    .dark .profile-card {
-      color: purple;
+    .reset {
       background: red;
     }
-    .dark .role {
-      color:brown;
-    }
-    @media (max-width: 600px) {
-      body {
-        padding: 24px 14px;
-      }
-      .profile-card {
-        width: 100%;
-        max-width: 360px;
-      }
+    .increase-five {
+      background: green;
     }
   </style>
 </head>
 <body>
-  <main class="card-section">
-    <h1>Our Team</h1>
-    <div class="card-container">
-      <article class="profile-card">
-          <img src="https://static.vecteezy.com/system/resources/thumbnails/036/230/794/small_2x/ai-generated-vibrant-raindrop-sphere-reflects-nature-beauty-in-abstract-free-photo.jpg">
-        <h2>ARAVIND</h2>
-        <p class="role">Frontend Developer</p>
-        <p>Enjoys building simple, user-friendly websites.</p>
-        <a href="mailto:ARAVIND@example.com">Contact</a>
-      </article>
-      <article class="profile-card">
-        <img src="https://static.vecteezy.com/system/resources/thumbnails/036/230/794/small_2x/ai-generated-vibrant-raindrop-sphere-reflects-nature-beauty-in-abstract-free-photo.jpg">
-        <h2>Kumar</h2>
-        <p class="role">CSS</p>
-        <p>making colorful webpage.</p>
-        <a href="mailto:kumar@example.com">Contact</a>
-      </article>
-      <article class="profile-card extra-card">
-        <img src="https://static.vecteezy.com/system/resources/thumbnails/036/230/794/small_2x/ai-generated-vibrant-raindrop-sphere-reflects-nature-beauty-in-abstract-free-photo.jpg">
-        <h2>Singh</h2>
-        <p class="role">JavaScript</p>
-        <p>making interactive webpage.</p>
-        <a href="mailto:Singh@example.com">Contact</a>
-      </article>
+  <div class="container">
+    <h1>My Counter App</h1>
+    <p id="counter" class="zero">0</p>
+    <div class="buttons">
+      <button id="increase" class="increase">Increase</button>
+      <button id="decreaseNo" class="decrease">Decrease</button>
+      <button id="resetNo" class="reset">Reset</button>
+      <button id="increase5No" class="increase-five">Increase by 5</button>
     </div>
-    <button
-      class="show-button"
-      id="showButton"
-      type="button"
-      aria-expanded="false">
-      Show more
-    </button>
-  </main>
+  </div>
   <script>
-    const showButton = document.querySelector("#showButton");
-    const extraCard = document.querySelector(".extra-card");
-    showButton.addEventListener("click", function () {
-      const isVisible = extraCard.classList.toggle("visible");
-      showButton.textContent = isVisible ? "Show less" : "Show more";
-      showButton.setAttribute("aria-expanded", isVisible);
+    let count = 0;
+    const counter = document.getElementById("counter");
+    const increase = document.getElementById("increase");
+    const decreaseNo = document.getElementById("decreaseNo");
+    const resetNo = document.getElementById("resetNo");
+    const increase5No = document.getElementById("increase5No");
+    function updateCounter() {
+      counter.textContent = count;
+      if (count > 0) {
+        counter.className = "positive";
+      } else if (count < 0) {
+        counter.className = "negative";
+      } else {
+        counter.className = "zero";
+      }
+    }
+    increase.addEventListener("click",function(){
+      count++;
+      updateCounter();
     });
+    decreaseNo.addEventListener("click",function(){
+      if (count > 0){
+        count--;
+      }
+      updateCounter();
+    });
+    resetNo.addEventListener("click",function(){
+      count = 0;
+      updateCounter();
+    });
+    increase5No.addEventListener("click",function(){
+      count += 5;
+      updateCounter();
+    });
+    updateCounter();
   </script>
 </body>
 </html>
