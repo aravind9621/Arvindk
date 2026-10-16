@@ -1,115 +1,154 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>My Counter App</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family:Verdana;
-    }
-    body {
-      margin: 50px 0px 0px 0px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: white;
-    }
-    .container {
-      background: Pink;
-      padding: 40px;
-      border-radius: 20px;
-      text-align: center;
-      box-shadow: 0 10px 30px gray;
-      width: 90%;
-      max-width: 420px;
-    }
-    h1 {
-      margin-bottom: 25px;
-      color: black;
-    }
-    #counter {
-      font-size: 70px;
-      font-weight: bold;
-      margin-bottom: 30px;
-      color: black;
-    }
-    .buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: center;
-    }
-    button {
-      padding: 12px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      color: white;
-    }
-    .increase {
-      background:skyblue;
-    }
-    .decrease {
-      background: yellow;
-    }
-    .reset {
-      background: red;
-    }
-    .increase-five {
-      background: green;
-    }
-  </style>
+    <title>My Image Gallery</title>
+    <style>
+        body {
+            background: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .gallery {
+            background: pink;
+            max-width: 500px;
+            margin: auto;
+            padding: 20px;
+            box-shadow: 0 5px 15px gray;
+        }
+
+        h1 {
+            margin-bottom: 15px;
+        }
+
+        img {
+            width: 100%;
+            height: 300px;
+        }
+
+        .caption {
+            margin: 10px 0px;
+            color: black;
+        }
+
+        .counter {
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        button {
+            padding: 10px 18px;
+            margin: 5px;
+            border: none;
+            background: blue;
+            font-size: 15px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            margin: 3px;
+            border: none;
+            background: green;
+        }
+
+        .active {
+            background: orange;
+        }
+    </style>
 </head>
+
 <body>
-  <div class="container">
-    <h1>My Counter App</h1>
-    <p id="counter" class="zero">0</p>
-    <div class="buttons">
-      <button id="increase" class="increase">Increase</button>
-      <button id="decreaseNo" class="decrease">Decrease</button>
-      <button id="resetNo" class="reset">Reset</button>
-      <button id="increase5No" class="increase-five">Increase by 5</button>
+    <div class="gallery">
+        <h1>My Image Gallery</h1>
+        <img id="myImage" src="https://wallpapers.com/images/featured/most-beautiful-nature-pictures-hdb30wtkjbn08xlf.jpg" alt="Gallery Image">
+        <p id="caption" class="caption">Beautiful Nature</p>
+        <p id="counter" class="counter">Image 1 of 4</p>
+        <button onclick="previousImage()">Previous</button>
+        <button onclick="playPause()">Play</button>
+        <button onclick="nextImage()">Next</button>
+        <div id="dots" class="dots"></div>
     </div>
-  </div>
-  <script>
-    let count = 0;
-    const counter = document.getElementById("counter");
-    const increase = document.getElementById("increase");
-    const decreaseNo = document.getElementById("decreaseNo");
-    const resetNo = document.getElementById("resetNo");
-    const increase5No = document.getElementById("increase5No");
-    function updateCounter() {
-      counter.textContent = count;
-      if (count > 0) {
-        counter.className = "positive";
-      } else if (count < 0) {
-        counter.className = "negative";
-      } else {
-        counter.className = "zero";
-      }
-    }
-    increase.addEventListener("click",function(){
-      count++;
-      updateCounter();
-    });
-    decreaseNo.addEventListener("click",function(){
-      if (count > 0){
-        count--;
-      }
-      updateCounter();
-    });
-    resetNo.addEventListener("click",function(){
-      count = 0;
-      updateCounter();
-    });
-    increase5No.addEventListener("click",function(){
-      count += 5;
-      updateCounter();
-    });
-    updateCounter();
-  </script>
+    <script>
+        var images = [{
+                src: "https://wallpapers.com/images/featured/most-beautiful-nature-pictures-hdb30wtkjbn08xlf.jpg",
+                caption: "Beautiful Nature"
+            },
+            {
+                src: "https://wallpaperaccess.com/full/895.jpg",
+                caption: "City View"
+            },
+            {
+                src: "https://static.vecteezy.com/system/resources/thumbnails/034/329/135/small_2x/low-angle-of-hikers-with-backpacks-walks-in-mountain-group-of-hikers-with-backpacks-are-walking-along-mountain-generative-ai-photo.jpg",
+                caption: "Mountain Trip"
+            },
+            {
+                src: "https://wallup.net/wp-content/uploads/2017/03/15/76088-beach-sunset.jpg",
+                caption: "Beach Sunset"
+            }
+        ];
+        var current = 0;
+        var timer = null;
+        var playing = false;
+        var image = document.getElementById("myImage");
+        var caption = document.getElementById("caption");
+        var counter = document.getElementById("counter");
+        var dotsBox = document.getElementById("dotsBox");
+        for (var i = 0; i < images.length; i++) {
+            var dot = document.createElement("button");
+            dot.className = "dot";
+            dot.onclick = function() {
+                current = i;
+                showImage();
+            };
+            dotsBox.appendChild(dot);
+        }
+
+        function showImage() {
+            image.src = images[current].src;
+            caption.innerHTML = images[current].caption;
+            counter.innerHTML = "Image " + (current + 1) + " of " + images.length;
+            var dots = document.getElementsByClassName("dot");
+            for (var j = 0; j < dots.length; j++) {
+                if (j === current) {
+                    dots[j].classList.add("active");
+                } else {
+                    dots[j].classList.remove("active");
+                }
+            }
+        }
+
+        function nextImage() {
+            current = current + 1;
+
+            if (current === images.length) {
+                current = 0;
+            }
+            showImage();
+        }
+
+        function previousImage() {
+            current = current - 1;
+            if (current < 0) {
+                current = images.length - 1;
+            }
+            showImage();
+        }
+
+        function playPause() {
+            if (playing === false) {
+                timer = setInterval(nextImage, 2000);
+                playing = true;
+                event.target.innerHTML = "Pause";
+            } else {
+                clearInterval(timer);
+                playing = false;
+                event.target.innerHTML = "Play";
+            }
+        }
+        showImage();
+    </script>
 </body>
+
 </html>
