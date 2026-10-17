@@ -1,154 +1,135 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <title>My Image Gallery</title>
-    <style>
-        body {
-            background: white;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .gallery {
-            background: pink;
-            max-width: 500px;
-            margin: auto;
-            padding: 20px;
-            box-shadow: 0 5px 15px gray;
-        }
-
-        h1 {
-            margin-bottom: 15px;
-        }
-
-        img {
-            width: 100%;
-            height: 300px;
-        }
-
-        .caption {
-            margin: 10px 0px;
-            color: black;
-        }
-
-        .counter {
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        button {
-            padding: 10px 18px;
-            margin: 5px;
-            border: none;
-            background: blue;
-            font-size: 15px;
-        }
-
-        .dot {
-            width: 12px;
-            height: 12px;
-            margin: 3px;
-            border: none;
-            background: green;
-        }
-
-        .active {
-            background: orange;
-        }
-    </style>
+  <title>Guess the Number!</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body{
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .game-card {
+      background:pink;
+      width: 100%;
+      max-width: 420px;
+      padding: 30px 25px;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px gray;
+      text-align: center;
+    }
+    h1{
+      color: black;
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    .instruction{
+      color: black;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+    input[type="number"]{
+      width:100%;
+      padding:12px;
+      font-size:18px;
+      text-align:center;
+      outline: none;
+      margin-bottom:15px;
+    }
+    button{
+      width:100%;
+      padding:12px;
+      font-size:17px;
+      font-weight:bold;
+      color: white;
+      background:blue;
+      border: none;
+      cursor:pointer;
+      transition:transform 0.2s ease, background 0.2s ease;
+    }
+    #playAgainBtn{
+      background:green;
+      margin-top: 10px;
+      display: none;
+    }
+    .message{
+      min-height: 30px;
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      padding: 10px;
+    }
+    .success{
+      color: white;
+      background: purple;
+    }
+    .error {
+        color: red;
+      background: white;
+    }
+  </style>
 </head>
-
 <body>
-    <div class="gallery">
-        <h1>My Image Gallery</h1>
-        <img id="myImage" src="https://wallpapers.com/images/featured/most-beautiful-nature-pictures-hdb30wtkjbn08xlf.jpg" alt="Gallery Image">
-        <p id="caption" class="caption">Beautiful Nature</p>
-        <p id="counter" class="counter">Image 1 of 4</p>
-        <button onclick="previousImage()">Previous</button>
-        <button onclick="playPause()">Play</button>
-        <button onclick="nextImage()">Next</button>
-        <div id="dots" class="dots"></div>
-    </div>
-    <script>
-        var images = [{
-                src: "https://wallpapers.com/images/featured/most-beautiful-nature-pictures-hdb30wtkjbn08xlf.jpg",
-                caption: "Beautiful Nature"
-            },
-            {
-                src: "https://wallpaperaccess.com/full/895.jpg",
-                caption: "City View"
-            },
-            {
-                src: "https://static.vecteezy.com/system/resources/thumbnails/034/329/135/small_2x/low-angle-of-hikers-with-backpacks-walks-in-mountain-group-of-hikers-with-backpacks-are-walking-along-mountain-generative-ai-photo.jpg",
-                caption: "Mountain Trip"
-            },
-            {
-                src: "https://wallup.net/wp-content/uploads/2017/03/15/76088-beach-sunset.jpg",
-                caption: "Beach Sunset"
-            }
-        ];
-        var current = 0;
-        var timer = null;
-        var playing = false;
-        var image = document.getElementById("myImage");
-        var caption = document.getElementById("caption");
-        var counter = document.getElementById("counter");
-        var dotsBox = document.getElementById("dotsBox");
-        for (var i = 0; i < images.length; i++) {
-            var dot = document.createElement("button");
-            dot.className = "dot";
-            dot.onclick = function() {
-                current = i;
-                showImage();
-            };
-            dotsBox.appendChild(dot);
-        }
-
-        function showImage() {
-            image.src = images[current].src;
-            caption.innerHTML = images[current].caption;
-            counter.innerHTML = "Image " + (current + 1) + " of " + images.length;
-            var dots = document.getElementsByClassName("dot");
-            for (var j = 0; j < dots.length; j++) {
-                if (j === current) {
-                    dots[j].classList.add("active");
-                } else {
-                    dots[j].classList.remove("active");
-                }
-            }
-        }
-
-        function nextImage() {
-            current = current + 1;
-
-            if (current === images.length) {
-                current = 0;
-            }
-            showImage();
-        }
-
-        function previousImage() {
-            current = current - 1;
-            if (current < 0) {
-                current = images.length - 1;
-            }
-            showImage();
-        }
-
-        function playPause() {
-            if (playing === false) {
-                timer = setInterval(nextImage, 2000);
-                playing = true;
-                event.target.innerHTML = "Pause";
-            } else {
-                clearInterval(timer);
-                playing = false;
-                event.target.innerHTML = "Play";
-            }
-        }
-        showImage();
-    </script>
+  <div class="game-card">
+    <h1>Guess the Number</h1>
+    <p class="instruction">Guess a number between 0 and 100.</p>
+    <input type="number" id="guessInput" min="0" max="100" placeholder="Enter your guess" />
+    <button id="checkBtn">Check Guess</button>
+    <button id="playAgainBtn">Play Again</button>
+    <p id="message" class="message info">Make your first guess</p>
+  </div>
+  <script>
+    const guessInput = document.getElementById("guessInput");
+    const checkBtn = document.getElementById("checkBtn");
+    const playAgainBtn = document.getElementById("playAgainBtn");
+    const message = document.getElementById("message");
+    let secretNumber = generateRandomNumber();
+    function generateRandomNumber(){
+      return Math.floor(Math.random()*100)+1;
+    }
+    function showMessage(text, type){
+      message.textContent = text;
+      message.className = "message " +type;
+    }
+    function checkGuess(){
+      const guess = Number(guessInput.value);
+      if (!guess || guess < 0 || guess > 100){
+        showMessage("Please enter a number between 0 and 100.", "error");
+        return;
+      }
+      if (guess > secretNumber) {
+        showMessage("Too High!", "error");
+      } else if (guess < secretNumber) {
+        showMessage("Too Low!", "error");
+      } else {
+        showMessage("Correct! You Won!", "success");
+        checkBtn.style.display = "none";
+        playAgainBtn.style.display = "block";
+      }
+      guessInput.value = "";
+      guessInput.focus();
+    }
+    function restartGame(){
+      secretNumber = generateRandomNumber();
+      showMessage("Make your first guess!", "info");
+      checkBtn.style.display = "block";
+      playAgainBtn.style.display = "none";
+      guessInput.value = "";
+      guessInput.focus();
+    }
+    checkBtn.addEventListener("click",checkGuess);
+    playAgainBtn.addEventListener("click",restartGame);
+    guessInput.addEventListener("keydown",function(event){
+      if (event.key === "Enter") {
+        checkGuess();
+      }
+    });
+  </script>
 </body>
-
 </html>
