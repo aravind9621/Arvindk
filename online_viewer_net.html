@@ -1,134 +1,123 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Guess the Number!</title>
+  <title>Background Color Changer</title>
   <style>
-    *{
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
     body{
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      min-height:100px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background-color:pink;
+      transition: background-color 0.4s ease;
       padding: 20px;
     }
-    .game-card {
-      background:pink;
-      width: 100%;
-      max-width: 420px;
-      padding: 30px 25px;
-      border-radius: 20px;
-      box-shadow: 0 15px 35px gray;
+    .container{
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px gray;
       text-align: center;
+      max-width: 500px;
+      width: 100%;
     }
     h1{
-      color: black;
-      font-size: 28px;
       margin-bottom: 10px;
+      font-size: 28px;
     }
-    .instruction{
-      color: black;
-      font-size: 16px;
-      margin-bottom: 20px;
+    p{
+      margin-bottom: 25px;
     }
-    input[type="number"]{
-      width:100%;
-      padding:12px;
-      font-size:18px;
-      text-align:center;
-      outline: none;
-      margin-bottom:15px;
+    .selected-color{
+      display: inline-block;
+      background: white;
+      border: 1px solid black;
+      padding: 10px 16px;
+      margin-bottom: 25px;
+      font-weight: bold;
+    }
+    .buttons{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:12px;
     }
     button{
-      width:100%;
-      padding:12px;
-      font-size:17px;
+      border:none;
+      color:white;
+      padding:12px 22px;
+      font-size:16px;
       font-weight:bold;
-      color: white;
-      background:blue;
-      border: none;
+      border-radius:10px;
       cursor:pointer;
-      transition:transform 0.2s ease, background 0.2s ease;
+      transition:transform 0.2s ease, opacity 0.2s ease;
     }
-    #playAgainBtn{
-      background:green;
-      margin-top: 10px;
-      display: none;
+    .red{
+      background-color:red;
     }
-    .message{
-      min-height: 30px;
-      margin-top: 20px;
-      font-size: 18px;
-      font-weight: bold;
-      padding: 10px;
+    .green{
+      background-color:green;
     }
-    .success{
-      color: white;
-      background: purple;
+    .blue{
+      background-color:blue;
     }
-    .error {
-        color: red;
-      background: white;
+    .yellow{
+      background-color:Yellow;
+    }
+    .random{
+      background-color:gray;
+    }
+    .reset{
+      background-color: black;
     }
   </style>
 </head>
 <body>
-  <div class="game-card">
-    <h1>Guess the Number</h1>
-    <p class="instruction">Guess a number between 0 and 100.</p>
-    <input type="number" id="guessInput" min="0" max="100" placeholder="Enter your guess" />
-    <button id="checkBtn">Check Guess</button>
-    <button id="playAgainBtn">Play Again</button>
-    <p id="message" class="message info">Make your first guess</p>
+  <div class="container">
+    <h1>Background Color Changer</h1>
+    <p>Click a button to change the background color</p>
+    <div class="selected-color">
+      Selected color: <span id="colorName">Default</span>
+    </div>
+    <div class="buttons">
+      <button class="red" data-color="Red">Red</button>
+      <button class="green" data-color="Green">Green</button>
+      <button class="blue" data-color="Blue">Blue</button>
+      <button class="yellow" data-color="Yellow">Yellow</button>
+      <button class="random" id="randomBtn">Random Color</button>
+      <button class="reset" id="resetBtn">Reset</button>
+    </div>
   </div>
   <script>
-    const guessInput = document.getElementById("guessInput");
-    const checkBtn = document.getElementById("checkBtn");
-    const playAgainBtn = document.getElementById("playAgainBtn");
-    const message = document.getElementById("message");
-    let secretNumber = generateRandomNumber();
-    function generateRandomNumber(){
-      return Math.floor(Math.random()*100)+1;
+    const originalColor = "white";
+    const colorName = document.getElementById("colorName");
+    const colorButtons = document.querySelectorAll("[data-color]");
+    const randomButton = document.getElementById("randomBtn");
+    const resetButton = document.getElementById("resetBtn");
+    function changeBackgroundColor(color, name) {
+      document.body.style.backgroundColor = color;
+      colorName.textContent = name;
     }
-    function showMessage(text, type){
-      message.textContent = text;
-      message.className = "message " +type;
-    }
-    function checkGuess(){
-      const guess = Number(guessInput.value);
-      if (!guess || guess < 0 || guess > 100){
-        showMessage("Please enter a number between 0 and 100.", "error");
-        return;
+    function getRandomColor(){
+      const letters = "0123456789ABCDEF";
+      let color = "#";
+      for (let i = 0; i < 6; i++){
+        color += letters[Math.floor(Math.random()*16)];
       }
-      if (guess > secretNumber) {
-        showMessage("Too High!", "error");
-      } else if (guess < secretNumber) {
-        showMessage("Too Low!", "error");
-      } else {
-        showMessage("Correct! You Won!", "success");
-        checkBtn.style.display = "none";
-        playAgainBtn.style.display = "block";
-      }
-      guessInput.value = "";
-      guessInput.focus();
+      return color;
     }
-    function restartGame(){
-      secretNumber = generateRandomNumber();
-      showMessage("Make your first guess!", "info");
-      checkBtn.style.display = "block";
-      playAgainBtn.style.display = "none";
-      guessInput.value = "";
-      guessInput.focus();
-    }
-    checkBtn.addEventListener("click",checkGuess);
-    playAgainBtn.addEventListener("click",restartGame);
-    guessInput.addEventListener("keydown",function(event){
-      if (event.key === "Enter") {
-        checkGuess();
-      }
+    colorButtons.forEach(function (button){
+      button.addEventListener("click",function(){
+        const selectedColor = button.dataset.color.toLowerCase();
+        changeBackgroundColor(selectedColor,button.dataset.color);
+      });
+    });
+    randomButton.addEventListener("click",function(){
+      const randomColor = getRandomColor();
+      changeBackgroundColor(randomColor,randomColor);
+    });
+    resetButton.addEventListener("click",function(){
+      changeBackgroundColor(originalColor,"Default");
     });
   </script>
 </body>
