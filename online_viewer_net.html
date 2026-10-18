@@ -1,123 +1,247 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Background Color Changer</title>
+  <title>My Quiz App</title>
   <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
     body{
       min-height:100px;
       display:flex;
       align-items:center;
       justify-content:center;
-      background-color:pink;
-      transition: background-color 0.4s ease;
-      padding: 20px;
+      padding:20px;
     }
-    .container{
-      background: white;
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px gray;
-      text-align: center;
-      max-width: 500px;
-      width: 100%;
+    .quiz-card{
+      background:pink;
+      width:100%;
+      max-width:560px;
+      padding:28px;
+      border-radius:18px;
+      box-shadow:0 15px 35px gray;
     }
     h1{
-      margin-bottom: 10px;
-      font-size: 28px;
+      text-align:center;
+      color:black;
+      margin-bottom:20px;
     }
-    p{
-      margin-bottom: 25px;
+    .question{
+      background:white;
+      border:1px solid black;
+      padding:16px;
+      margin-bottom:16px;
     }
-    .selected-color{
-      display: inline-block;
-      background: white;
+    .question h3{
+      color:black;
+      margin-bottom:12px;
+      font-size:17px;
+    }
+    .option{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      background:white;
       border: 1px solid black;
-      padding: 10px 16px;
-      margin-bottom: 25px;
-      font-weight: bold;
+      border-radius:8px;
+      padding: 10px 12px;
+      margin-bottom:8px;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+    .option input{
+      accent-color:blue;
+      width:18px;
+      height:18px;
     }
     .buttons{
       display:flex;
-      flex-wrap:wrap;
-      justify-content:center;
       gap:12px;
+      margin-top:20px;
     }
-    button{
-      border:none;
-      color:white;
-      padding:12px 22px;
-      font-size:16px;
-      font-weight:bold;
-      border-radius:10px;
-      cursor:pointer;
-      transition:transform 0.2s ease, opacity 0.2s ease;
+    button {
+      flex: 1;
+      padding: 13px;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.2s ease;
     }
-    .red{
-      background-color:red;
+    #submitBtn{
+      background:gray;
+      color: white;
     }
-    .green{
-      background-color:green;
+
+    #submitBtn:hover{
+      background: blue;
     }
-    .blue{
-      background-color:blue;
+    #restartBtn{
+      background: purple;
+      color: white;
     }
-    .yellow{
-      background-color:Yellow;
+
+    #restartBtn:hover{
+      background: orange;
     }
-    .random{
-      background-color:gray;
+    #result{
+      margin-top:20px;
+      padding:16px;
+      border-radius:12px;
+      text-align:center;
+      font-weight:600;
+      display:none;
     }
-    .reset{
-      background-color: black;
+    .result-success{
+      background:green;
+      color: white;
+      border: 1px solid gray;
+    }
+    .result-warning {
+      background: red;
+      color:red;
+      border: 1px solid gray;
+    }
+
+    .result-error {
+      background: white;
+      color: blue ;
+      border: 1px solid gray;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Background Color Changer</h1>
-    <p>Click a button to change the background color</p>
-    <div class="selected-color">
-      Selected color: <span id="colorName">Default</span>
-    </div>
-    <div class="buttons">
-      <button class="red" data-color="Red">Red</button>
-      <button class="green" data-color="Green">Green</button>
-      <button class="blue" data-color="Blue">Blue</button>
-      <button class="yellow" data-color="Yellow">Yellow</button>
-      <button class="random" id="randomBtn">Random Color</button>
-      <button class="reset" id="resetBtn">Reset</button>
-    </div>
-  </div>
+  <main class="quiz-card">
+    <h1>My Quiz App</h1>
+    <form id="quizForm">
+      <section class="question">
+        <h3>1. Which language is used to style a webpage?</h3>
+        <label class="option">
+          <input type="radio" name="q1" value="A" />
+          A) HTML
+        </label>
+        <label class="option">
+          <input type="radio" name="q1" value="B" />
+          B) CSS
+        </label>
+        <label class="option">
+          <input type="radio" name="q1" value="C" />
+          C) Python
+        </label>
+      </section>
+      <section class="question">
+        <h3>2. What does HTML stand for?</h3>
+        <label class="option">
+          <input type="radio" name="q2" value="A" />
+          A) Hyper Text Markup Language
+        </label>
+        <label class="option">
+          <input type="radio" name="q2" value="B" />
+          B) High Text Machine Language
+        </label>
+        <label class="option">
+          <input type="radio" name="q2" value="C" />
+          C) Hyperlink and Text Management Language
+        </label>
+      </section>
+      <section class="question">
+        <h3>3. Which symbol is used to select an ID in CSS?</h3>
+        <label class="option">
+          <input type="radio" name="q3" value="A" />
+          A) .
+        </label>
+        <label class="option">
+          <input type="radio" name="q3" value="B" />
+          B) #
+        </label>
+        <label class="option">
+          <input type="radio" name="q3" value="C" />
+          C) @
+        </label>
+      </section>
+      <section class="question">
+        <h3>4. Which JavaScript method adds a click event?</h3>
+        <label class="option">
+          <input type="radio" name="q4" value="A" />
+          A) addEventListener()
+        </label>
+        <label class="option">
+          <input type="radio" name="q4" value="B" />
+          B) addEvent()
+        </label>
+        <label class="option">
+          <input type="radio" name="q4" value="C" />
+          C) listenEvent()
+        </label>
+      </section>
+      <section class="question">
+        <h3>5. Which language makes a webpage interactive?</h3>
+        <label class="option">
+          <input type="radio" name="q5" value="A" />
+          A) HTML
+        </label>
+        <label class="option">
+          <input type="radio" name="q5" value="B" />
+          B) CSS
+        </label>
+        <label class="option">
+          <input type="radio" name="q5" value="C" />
+          C) JavaScript
+        </label>
+      </section>
+      <div class="buttons">
+        <button type="submit" id="submitBtn">Submit Quiz</button>
+        <button type="button" id="restartBtn">Restart Quiz</button>
+      </div>
+    </form>
+    <div id="result"></div>
+  </main>
   <script>
-    const originalColor = "white";
-    const colorName = document.getElementById("colorName");
-    const colorButtons = document.querySelectorAll("[data-color]");
-    const randomButton = document.getElementById("randomBtn");
-    const resetButton = document.getElementById("resetBtn");
-    function changeBackgroundColor(color, name) {
-      document.body.style.backgroundColor = color;
-      colorName.textContent = name;
-    }
-    function getRandomColor(){
-      const letters = "0123456789ABCDEF";
-      let color = "#";
-      for (let i = 0; i < 6; i++){
-        color += letters[Math.floor(Math.random()*16)];
+    const quizForm = document.getElementById("quizForm");
+    const resultBox = document.getElementById("result");
+    const restartBtn = document.getElementById("restartBtn");
+    const correctAnswers={
+      q1:"B",
+      q2:"A",
+      q3:"B",
+      q4:"A",
+      q5:"C"
+    };
+    quizForm.addEventListener("submit", function(event){
+      event.preventDefault();
+      let score = 0;
+      let unanswered = false;
+      for (let questionName in correctAnswers) {
+        const selected = document.querySelector(
+          `input[name="${questionName}"]:checked`
+        );
+        if (selected === null){
+          unanswered = true;
+        } else if (selected.value === correctAnswers[questionName]) {
+          score++;
+        }
       }
-      return color;
-    }
-    colorButtons.forEach(function (button){
-      button.addEventListener("click",function(){
-        const selectedColor = button.dataset.color.toLowerCase();
-        changeBackgroundColor(selectedColor,button.dataset.color);
-      });
+      resultBox.style.display = "block";
+      if (unanswered) {
+        resultBox.className = "result-error";
+        resultBox.textContent = "Please select an answer for every question before submitting.";
+        return;
+      }
+      resultBox.className = score >= 4 ? "result-success" : "result-warning";
+      if (score >= 4) {
+        resultBox.textContent = `Excellent! Your score is ${score}/5. Great job!`;
+      } else {
+        resultBox.textContent = `Your score is ${score}/5. Keep practicing and try again!`;
+      }
     });
-    randomButton.addEventListener("click",function(){
-      const randomColor = getRandomColor();
-      changeBackgroundColor(randomColor,randomColor);
-    });
-    resetButton.addEventListener("click",function(){
-      changeBackgroundColor(originalColor,"Default");
+    restartBtn.addEventListener("click", function(){
+      quizForm.reset();
+      resultBox.style.display ="none";
+      resultBox.textContent ="";
+      resultBox.className ="";
     });
   </script>
 </body>
