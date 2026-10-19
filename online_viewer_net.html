@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>My Quiz App</title>
+  <title>Strong password Checker</title>
   <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
+   *{
+     margin:0px;
+     padding:0px;
+     box-sizing:border-box;
+     font-family:Verdana;
     }
     body{
       min-height:100px;
@@ -15,234 +16,293 @@
       justify-content:center;
       padding:20px;
     }
-    .quiz-card{
-      background:pink;
+    .card{
       width:100%;
-      max-width:560px;
+      max-width:430px;
+      background:pink;
       padding:28px;
-      border-radius:18px;
-      box-shadow:0 15px 35px gray;
+      box-shadow:0px 20px 45px gray;
     }
     h1{
-      text-align:center;
+      font-size:15px;
       color:black;
+      text-align:center;
+    }
+   .subtitle{
+      margin:8px 0 22px;
+    }
+    .input-group{
       margin-bottom:20px;
     }
-    .question{
-      background:white;
+    label{
+      display:block;
+      font-weight:600;
+      margin-bottom:7px;
+      color:Black;
+    }
+    input{
+      width:100%;
+      padding:12px 14px;
+      border:2px solid black;
+      font-size:10px;
+      outline:none;
+      transition:border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .password-wrapper{
+      position:relative;
+    }
+    .password-wrapper input{
+      padding-right:72px;
+    }
+    .toggle-btn{
+      position:absolute;
+      right:8px;
+      top:50%;
+      transform:translateY(-50%);
+      padding:7px 12px;
+      border:none;
+      background:blue;
+      color: white;
+      font-size:8px;
+      font-weight:600px;
+      transition:background 0.25s ease, transform 0.2s ease;
+    }
+    .strength-fill{
+      height:100%;
+      width:0%;
+      border-radius:999px;
+      background:red;
+      transition:width 0.4s ease, background-color 0.4s ease;
+    }
+    .strength-message{
+      margin-top:8px;
+      font-weight:600;
+      font-size:20px;
+      color:solid black;
+    }
+    .requirements{
+      background:skyblue;
       border:1px solid black;
-      padding:16px;
-      margin-bottom:16px;
+      padding:14px 16px;
+      margin-bottom:20px;
     }
-    .question h3{
-      color:black;
-      margin-bottom:12px;
-      font-size:17px;
-    }
-    .option{
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      background:white;
-      border: 1px solid black;
-      border-radius:8px;
-      padding: 10px 12px;
+    .requirements h2{
+      font-size:15px;
       margin-bottom:8px;
-      cursor: pointer;
-      transition: 0.2s ease;
+      color:black;
     }
-    .option input{
-      accent-color:blue;
-      width:18px;
-      height:18px;
+    .requirements ul {
+      list-style:none;
     }
+    .requirements li{
+      font-size:19px;
+      color:white;
+      padding: 3px 0;
+      transition: color 0.25s ease;
+    }
+
+    .requirements li.invalid::before{
+      content: "•";
+      color: black;
+    }
+    .requirements li.valid{
+      color:blue;
+      font-weight: 600;
+    }
+    .requirements li.valid::before{
+      content: "✔ ";
+    }
+    .match-message{
+      margin-top: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .match-message.match{
+      color: green;
+    }
+
+    .match-message.not-match{
+      color:Red;
+    }
+
     .buttons{
       display:flex;
-      gap:12px;
-      margin-top:20px;
+      justify-content:flex-end;
     }
-    button {
-      flex: 1;
-      padding: 13px;
-      font-size: 16px;
-      font-weight: 600;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: 0.2s ease;
-    }
-    #submitBtn{
-      background:gray;
-      color: white;
-    }
-
-    #submitBtn:hover{
-      background: blue;
-    }
-    #restartBtn{
-      background: purple;
-      color: white;
-    }
-
-    #restartBtn:hover{
-      background: orange;
-    }
-    #result{
-      margin-top:20px;
-      padding:16px;
-      border-radius:12px;
-      text-align:center;
+    .reset-btn{
+      padding:11px 18px;
+      border:none;
+      background:black;
+      color:white;
       font-weight:600;
-      display:none;
+      cursor:pointer;
+      transition: background 0.25s ease, transform 0.2s ease;
     }
-    .result-success{
-      background:green;
-      color: white;
-      border: 1px solid gray;
+    .weak{
+      background:red;
+      width: 33%;
     }
-    .result-warning {
-      background: red;
-      color:red;
-      border: 1px solid gray;
+    .medium{
+      background:yellow;
+      width:66%;
     }
 
-    .result-error {
-      background: white;
-      color: blue ;
-      border: 1px solid gray;
+    .strong{
+      background: green;
+      width: 100%;
     }
   </style>
 </head>
+
 <body>
-  <main class="quiz-card">
-    <h1>My Quiz App</h1>
-    <form id="quizForm">
-      <section class="question">
-        <h3>1. Which language is used to style a webpage?</h3>
-        <label class="option">
-          <input type="radio" name="q1" value="A" />
-          A) HTML
-        </label>
-        <label class="option">
-          <input type="radio" name="q1" value="B" />
-          B) CSS
-        </label>
-        <label class="option">
-          <input type="radio" name="q1" value="C" />
-          C) Python
-        </label>
-      </section>
-      <section class="question">
-        <h3>2. What does HTML stand for?</h3>
-        <label class="option">
-          <input type="radio" name="q2" value="A" />
-          A) Hyper Text Markup Language
-        </label>
-        <label class="option">
-          <input type="radio" name="q2" value="B" />
-          B) High Text Machine Language
-        </label>
-        <label class="option">
-          <input type="radio" name="q2" value="C" />
-          C) Hyperlink and Text Management Language
-        </label>
-      </section>
-      <section class="question">
-        <h3>3. Which symbol is used to select an ID in CSS?</h3>
-        <label class="option">
-          <input type="radio" name="q3" value="A" />
-          A) .
-        </label>
-        <label class="option">
-          <input type="radio" name="q3" value="B" />
-          B) #
-        </label>
-        <label class="option">
-          <input type="radio" name="q3" value="C" />
-          C) @
-        </label>
-      </section>
-      <section class="question">
-        <h3>4. Which JavaScript method adds a click event?</h3>
-        <label class="option">
-          <input type="radio" name="q4" value="A" />
-          A) addEventListener()
-        </label>
-        <label class="option">
-          <input type="radio" name="q4" value="B" />
-          B) addEvent()
-        </label>
-        <label class="option">
-          <input type="radio" name="q4" value="C" />
-          C) listenEvent()
-        </label>
-      </section>
-      <section class="question">
-        <h3>5. Which language makes a webpage interactive?</h3>
-        <label class="option">
-          <input type="radio" name="q5" value="A" />
-          A) HTML
-        </label>
-        <label class="option">
-          <input type="radio" name="q5" value="B" />
-          B) CSS
-        </label>
-        <label class="option">
-          <input type="radio" name="q5" value="C" />
-          C) JavaScript
-        </label>
-      </section>
+  <main class="card">
+    <h1>Strong password check</h1>
+  <p class="subtitle"></p>
+   
+    <form id="passwordForm" novalidate>
+      <div class="input-group">
+        <label for="password">Password</label>
+        <div class="password-wrapper">
+        <input type="password" id="password" placeholder="Enter your password" autocomplete="new-password" />
+          <button type="button" id="togglePassword"  class="toggle-btn"  aria-label="Show password" >
+            Show  </button>
+        </div>
+          <div id="strengthFill" class="strength-fill"></div>
+        </div>
+        <p id="strengthMessage" class="strength-message">
+          Please enter a password.  </p>
+      </div>
+      <div class="requirements">
+        <h2>Password requirements</h2>
+        <ul id="requirementList">
+          <li data-rule="length" class="invalid">At least 8 characters</li>
+          <li data-rule="uppercase" class="invalid">At least one uppercase letter</li>
+          <li data-rule="lowercase" class="invalid">At least one lowercase letter</li>
+          <li data-rule="number" class="invalid">At least one number</li>
+          <li data-rule="special" class="invalid">At least one special character</li>
+        </ul>
+      </div>
+      <div class="input-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input  type="password"   id="confirmPassword"  placeholder="Re-enter your password"  autocomplete="new-password"  />
+        <p id="matchMessage" class="match-message"></p>
+      </div>
       <div class="buttons">
-        <button type="submit" id="submitBtn">Submit Quiz</button>
-        <button type="button" id="restartBtn">Restart Quiz</button>
+        <button type="button" id="resetButton" class="reset-btn">
+          Reset
+        </button>
       </div>
     </form>
-    <div id="result"></div>
   </main>
   <script>
-    const quizForm = document.getElementById("quizForm");
-    const resultBox = document.getElementById("result");
-    const restartBtn = document.getElementById("restartBtn");
-    const correctAnswers={
-      q1:"B",
-      q2:"A",
-      q3:"B",
-      q4:"A",
-      q5:"C"
-    };
-    quizForm.addEventListener("submit", function(event){
-      event.preventDefault();
-      let score = 0;
-      let unanswered = false;
-      for (let questionName in correctAnswers) {
-        const selected = document.querySelector(
-          `input[name="${questionName}"]:checked`
-        );
-        if (selected === null){
-          unanswered = true;
-        } else if (selected.value === correctAnswers[questionName]) {
-          score++;
-        }
+    const passwordInput = document.getElementById("password");
+    const confirmPasswordInput = document.getElementById("confirmPassword");
+    const togglePasswordButton = document.getElementById("togglePassword");
+    const strengthFill = document.getElementById("strengthFill");
+    const strengthMessage = document.getElementById("strengthMessage");
+    const matchMessage = document.getElementById("matchMessage");
+    const resetButton = document.getElementById("resetButton");
+    const requirementItems = document.querySelectorAll("#requirementList li");
+    const rules ={
+      length: {
+        test: (value) => value.length >= 8
+      },
+      uppercase: {
+        test: (value) => /[A-Z]/.test(value)
+      },
+      lowercase: {
+        test: (value) => /[a-z]/.test(value)
+      },
+      number: {
+        test: (value) => /[0-9]/.test(value)
+      },
+      special: {
+        test: (value) => /[^A-Za-z0-9]/.test(value)
       }
-      resultBox.style.display = "block";
-      if (unanswered) {
-        resultBox.className = "result-error";
-        resultBox.textContent = "Please select an answer for every question before submitting.";
+    };
+    function updateRequirements(password){
+      let passedCount = 0;
+      requirementItems.forEach((item) =>{
+        const ruleName = item.dataset.rule;
+        const isValid = rules[ruleName].test(password);
+        item.classList.toggle("valid", isValid);
+        item.classList.toggle("invalid", !isValid);
+        if (isValid) {
+          passedCount++;
+        }
+      });
+      return passedCount;
+    }
+    function updateStrength(password){
+      if (password.length === 0) {
+        strengthFill.className = "strength-fill";
+        strengthMessage.textContent = "Please enter a password.";
+        strengthMessage.style.color = "#555";
         return;
       }
-      resultBox.className = score >= 4 ? "result-success" : "result-warning";
-      if (score >= 4) {
-        resultBox.textContent = `Excellent! Your score is ${score}/5. Great job!`;
+      const passedCount = updateRequirements(password);
+      if (passedCount <= 2){
+        strengthFill.className = "strength-fill weak";
+        strengthMessage.textContent = "Weak password";
+        strengthMessage.style.color = "#d9534f";
+      } else if (passedCount <= 4){
+        strengthFill.className = "strength-fill medium";
+        strengthMessage.textContent = "Medium password";
+        strengthMessage.style.color = "#b8860b";
       } else {
-        resultBox.textContent = `Your score is ${score}/5. Keep practicing and try again!`;
+        strengthFill.className = "strength-fill strong";
+        strengthMessage.textContent = "Strong password";
+        strengthMessage.style.color = "#1a7f37";
       }
+    }
+    function updatePasswordMatch(){
+      const password = passwordInput.value;
+      const confirmPassword = confirmPasswordInput.value;
+      if (confirmPassword.length === 0) {
+        matchMessage.textContent = "";
+        matchMessage.className = "match-message";
+        return;
+      }
+      if (password === confirmPassword){
+        matchMessage.textContent = "Passwords Match";
+        matchMessage.className = "match-message match";
+      } else {
+        matchMessage.textContent = "Passwords Do Not Match";
+        matchMessage.className = "match-message not-match";
+      }
+    }
+    function togglePasswordVisibility(){
+      const isHidden = passwordInput.type === "password";
+      passwordInput.type = isHidden ? "text" : "password";
+      togglePasswordButton.textContent = isHidden ? "Hide" : "Show";
+      togglePasswordButton.setAttribute(
+        "aria-label",
+        isHidden ? "Hide password" : "Show password"
+      );
+    }
+    function resetForm(){
+      passwordInput.value = "";
+      confirmPasswordInput.value = "";
+      passwordInput.type = "password";
+      togglePasswordButton.textContent = "Show";
+      togglePasswordButton.setAttribute("aria-label", "Show password");
+      strengthFill.className = "strength-fill";
+      strengthMessage.textContent = "Please enter a password.";
+      strengthMessage.style.color = "#555";
+      matchMessage.textContent = "";
+      matchMessage.className = "match-message";
+      requirementItems.forEach((item) => {
+        item.classList.remove("valid");
+        item.classList.add("invalid");
+      });
+    }
+    passwordInput.addEventListener("input", () => {
+      updateStrength(passwordInput.value);
+      updatePasswordMatch();
     });
-    restartBtn.addEventListener("click", function(){
-      quizForm.reset();
-      resultBox.style.display ="none";
-      resultBox.textContent ="";
-      resultBox.className ="";
-    });
+    confirmPasswordInput.addEventListener("input", updatePasswordMatch);
+    togglePasswordButton.addEventListener("click", togglePasswordVisibility);
+    resetButton.addEventListener("click", resetForm);
   </script>
 </body>
 </html>
