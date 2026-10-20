@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Rock Paper Scissors Game</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body{
+      min-height:100px;
+      background:white;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    }
+    .game{
+      width:100%;
+      max-width:560px;
+      background:pink;
+      border:1px solid gray;
+      border-radius:20px;
+      padding:28px;
+      text-align:center;
+      box-shadow:0 15px 35px gray;
+    }
+    h1{
+      font-size:17px;
+      margin-bottom: 8px;
+    }
+    .subtitle{
+      opacity: 0.85;
+      margin-bottom:22px;
+    }
+    .choices{
+      display:flex;
+      gap: 12px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-bottom:24px;
+    }
+    .choice{
+      background:white;
+      color:black;
+      border:none;
+      padding:14px 18px;
+      font-size:1rem;
+      font-weight:700;
+      cursor:pointer;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:6px;
+      min-width:100px;
+      transition:transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .choice:active{
+      transform:scale(0.96);
+    }
+    .result-box{
+      background:white;
+      border-radius: 16px;
+      padding: 18px;
+    }
+    #round-message{
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .battle{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:16px;
+      margin-bottom:16px;
+    }
+    .player,
+    .computer{
+      flex: 1;
+      background: orange;
+      border-radius: 12px;
+      padding: 12px;
+    }
+    .vs{
+      font-weight: 800;
+      font-size: 1.2rem;
+    }
+    #user-choice,
+    #computer-choice{
+      font-size: 2rem;
+      margin-top: 6px;
+    }
+    .scoreboard{
+      display: flex;
+      justify-content:center;
+      gap: 24px;
+      font-weight:700;
+      margin-bottom:12px;
+    }
+    #winner-message{
+      min-height: 24px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+    #restart{
+      background:blue;
+      color:white;
+      border: none;
+      padding: 12px 22px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+  </style>
+</head>
+<body>
+  <main class="game">
+    <h1>✊ Rock ✋ Paper ✌️ Scissors</h1>
+    <p class="subtitle">Choose your move and beat the computer</p>
+    <section class="choices">
+      <button class="choice" data-choice="rock">✊<span>Rock</span></button>
+      <button class="choice" data-choice="paper">✋<span>Paper</span></button>
+      <button class="choice" data-choice="scissors">✌️<span>Scissors</span></button>
+    </section>
+    <section class="result-box">
+      <p id="round-message">Make your choice to start the game.</p>
+      <div class="battle">
+        <div class="player">
+          <h3>You</h3>
+          <p id="user-choice">—</p>
+        </div>
+        <span class="vs">VS</span>
+        <div class="computer">
+          <h3>Computer</h3>
+          <p id="computer-choice">—</p>
+        </div>
+      </div>
+      <div class="scoreboard">
+        <p>You: <span id="user-score">0</span></p>
+        <p>Computer: <span id="computer-score">0</span></p>
+      </div>
+      <p id="winner-message"></p>
+      <button id="restart">🔄 Restart Game</button>
+    </section>
+  </main>
+  <script>
+    const choices = ["rock", "paper", "scissors"];
+    const choiceButtons = document.querySelectorAll(".choice");
+    const userChoiceText = document.getElementById("user-choice");
+    const computerChoiceText = document.getElementById("computer-choice");
+    const roundMessage = document.getElementById("round-message");
+    const winnerMessage = document.getElementById("winner-message");
+    const userScoreText = document.getElementById("user-score");
+    const computerScoreText = document.getElementById("computer-score");
+    const restartButton = document.getElementById("restart");
+    let userScore = 0;
+    let computerScore = 0;
+    const emojis = {
+      rock: "✊",
+      paper: "✋",
+      scissors: "✌️"
+    };
+    function getComputerChoice() {
+      const randomIndex = Math.floor(Math.random() * choices.length);
+      return choices[randomIndex];
+    }
+    function decideWinner(userChoice, computerChoice) {
+      if (userChoice === computerChoice) {
+        return "draw";
+      }
+      if (
+        (userChoice === "rock" && computerChoice === "scissors") ||
+        (userChoice === "paper" && computerChoice === "rock") ||
+        (userChoice === "scissors" && computerChoice === "paper")
+      ) {
+        return "user";
+      }
+      return "computer";
+    }
+    function playGame(userChoice) {
+      const computerChoice = getComputerChoice();
+      const result = decideWinner(userChoice, computerChoice);
+      userChoiceText.textContent = emojis[userChoice];
+      computerChoiceText.textContent = emojis[computerChoice];
+      roundMessage.textContent =
+        "You chose " + userChoice + ", computer chose " + computerChoice + ".";
+      if (result === "user") {
+        userScore++;
+        winnerMessage.textContent = "🎉 You win this round!";
+        winnerMessage.style.color = "#7CFC00";
+      } else if (result === "computer") {
+        computerScore++;
+        winnerMessage.textContent = "😢 Computer wins this round!";
+        winnerMessage.style.color = "#FF6B6B";
+      } else {
+        winnerMessage.textContent = "🤝 It's a draw!";
+        winnerMessage.style.color = "#FFD700";
+      }
+      userScoreText.textContent = userScore;
+      computerScoreText.textContent = computerScore;
+    }
+    choiceButtons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        playGame(button.dataset.choice);
+      });
+    });
+    restartButton.addEventListener("click", function () {
+      userScore = 0;
+      computerScore = 0;
+      userScoreText.textContent = "0";
+      computerScoreText.textContent = "0";
+      userChoiceText.textContent = "—";
+      computerChoiceText.textContent = "—";
+      roundMessage.textContent = "Make your choice to start the game.";
+      winnerMessage.textContent = "";
+    });
+  </script>
+</body>
+</html>
