@@ -1,308 +1,266 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Strong password Checker</title>
+  <title>Simple Shopping Website</title>
   <style>
-   *{
-     margin:0px;
-     padding:0px;
-     box-sizing:border-box;
-     font-family:Verdana;
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
     }
     body{
-      min-height:100px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
-    }
-    .card{
-      width:100%;
-      max-width:430px;
-      background:pink;
-      padding:28px;
-      box-shadow:0px 20px 45px gray;
-    }
-    h1{
-      font-size:15px;
-      color:black;
-      text-align:center;
-    }
-   .subtitle{
-      margin:8px 0 22px;
-    }
-    .input-group{
-      margin-bottom:20px;
-    }
-    label{
-      display:block;
-      font-weight:600;
-      margin-bottom:7px;
-      color:Black;
-    }
-    input{
-      width:100%;
-      padding:12px 14px;
-      border:2px solid black;
-      font-size:10px;
-      outline:none;
-      transition:border-color 0.25s ease, box-shadow 0.25s ease;
-    }
-    .password-wrapper{
-      position:relative;
-    }
-    .password-wrapper input{
-      padding-right:72px;
-    }
-    .toggle-btn{
-      position:absolute;
-      right:8px;
-      top:50%;
-      transform:translateY(-50%);
-      padding:7px 12px;
-      border:none;
-      background:blue;
-      color: white;
-      font-size:8px;
-      font-weight:600px;
-      transition:background 0.25s ease, transform 0.2s ease;
-    }
-    .strength-fill{
-      height:100%;
-      width:0%;
-      border-radius:999px;
-      background:red;
-      transition:width 0.4s ease, background-color 0.4s ease;
-    }
-    .strength-message{
-      margin-top:8px;
-      font-weight:600;
-      font-size:20px;
-      color:solid black;
-    }
-    .requirements{
-      background:skyblue;
-      border:1px solid black;
-      padding:14px 16px;
-      margin-bottom:20px;
-    }
-    .requirements h2{
-      font-size:15px;
-      margin-bottom:8px;
-      color:black;
-    }
-    .requirements ul {
-      list-style:none;
-    }
-    .requirements li{
-      font-size:19px;
-      color:white;
-      padding: 3px 0;
-      transition: color 0.25s ease;
-    }
-
-    .requirements li.invalid::before{
-      content: "•";
+      background:whitesmoke;
       color: black;
     }
-    .requirements li.valid{
-      color:blue;
-      font-weight: 600;
-    }
-    .requirements li.valid::before{
-      content: "✔ ";
-    }
-    .match-message{
-      margin-top: 8px;
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-    .match-message.match{
-      color: green;
-    }
-
-    .match-message.not-match{
-      color:Red;
-    }
-
-    .buttons{
-      display:flex;
-      justify-content:flex-end;
-    }
-    .reset-btn{
-      padding:11px 18px;
-      border:none;
-      background:black;
+    .navbar{
+      background:darkslategray;
       color:white;
-      font-weight:600;
+      padding:15px 25px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:15px;
+      flex-wrap:wrap;
+      position:sticky;
+      top:0;
+    }
+    .logo{
+      font-size:24px;
+      color:lightblue;
+    }
+    .search-bar{
+      padding:10px 15px;
+      border:none;
+      border-radius:20px;
+      width:260px;
+      outline:none;
+    }
+    .cart-box{
+      background:lightblue;
+      color:black;
+      padding:10px 16px;
+      border-radius:20px;
+      font-weight:bold;
+    }
+    .container{
+      max-width:1100px;
+      margin:auto;
+      padding:25px;
+    }
+    .section-title{
+      text-align:center;
+      margin-bottom:20px;
+    }
+    .products{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(230px, 1fr));
+      gap: 20px;
+    }
+    .product{
+      background:white;
+      border-radius:12px;
+      padding:15px;
+      text-align:center;
+      box-shadow:0 4px 12px gray;
+      transition:transform 0.2s;
+    }
+    .product img{
+      width:100%;
+      height:180px;
+      object-fit:cover;
+      border-radius:10px;
+    }
+    .product h3{
+      margin:12px 0 5px;
+    }
+    .price{
+      font-size:18px;
+      font-weight:bold;
+      color:green;
+      margin-bottom:12px;
+    }
+    .add-btn{
+      background:royalblue;
+      color:white;
+      border:none;
+      padding:10px 18px;
+      border-radius:8px;
       cursor:pointer;
-      transition: background 0.25s ease, transform 0.2s ease;
+      font-size:15px;
+     }
+    .cart-section{
+      background:white;
+      margin-top:35px;
+      padding:20px;
+      border-radius:12px;
+      box-shadow:0 4px 12px rgba(0, 0, 0, 0.2);
     }
-    .weak{
+    .cart-section h2{
+      margin-bottom:15px;
+    }
+    #cartItems{
+      list-style:none;
+    }
+    #cartItems li{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding:10px;
+      border-bottom:1px solid lightgray;
+    }
+    .remove-btn{
       background:red;
-      width: 33%;
+      color:white;
+      border:none;
+      padding:6px 12px;
+      cursor:pointer;
     }
-    .medium{
-      background:yellow;
-      width:66%;
+    .cart-total{
+      text-align:right;
+      margin-top:15px;
+      font-size:18px;
     }
-
-    .strong{
-      background: green;
-      width: 100%;
+    footer{
+      text-align:center;
+      padding:20px;
+      margin-top:30px;
+      background:darkslategray;
+      color:white;
+    }
+    @media (max-width: 600px) {
+      .navbar {
+        flex-direction: column;
+        text-align: center;
+      }
+      .search-bar {
+        width: 100%;
+      }
+      .products {
+        grid-template-columns: 1fr;
+      }
+      #cartItems li {
+        flex-direction: column;
+        text-align: center;
+      }
     }
   </style>
 </head>
-
 <body>
-  <main class="card">
-    <h1>Strong password check</h1>
-  <p class="subtitle"></p>
-   
-    <form id="passwordForm" novalidate>
-      <div class="input-group">
-        <label for="password">Password</label>
-        <div class="password-wrapper">
-        <input type="password" id="password" placeholder="Enter your password" autocomplete="new-password" />
-          <button type="button" id="togglePassword"  class="toggle-btn"  aria-label="Show password" >
-            Show  </button>
-        </div>
-          <div id="strengthFill" class="strength-fill"></div>
-        </div>
-        <p id="strengthMessage" class="strength-message">
-          Please enter a password.  </p>
+  <header class="navbar">
+    <h1 class="logo">ShopEase</h1>
+    <input
+      type="text"
+      id="searchInput"
+      class="search-bar"
+      placeholder="Search products...">
+    <div class="cart-box">
+      🛒 Cart: <span id="cartCount">0</span>
+    </div>
+  </header>
+  <main class="container">
+    <h2 class="section-title">Our Products</h2>
+    <section class="products" id="productList">
+      <div class="product" data-name="Wireless Headphones" data-price="1499">
+        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500" alt="Wireless Headphones">
+        <h3>Wireless Headphones</h3>
+        <p class="price">₹1,499</p>
+        <button class="add-btn">Add to Cart</button>
       </div>
-      <div class="requirements">
-        <h2>Password requirements</h2>
-        <ul id="requirementList">
-          <li data-rule="length" class="invalid">At least 8 characters</li>
-          <li data-rule="uppercase" class="invalid">At least one uppercase letter</li>
-          <li data-rule="lowercase" class="invalid">At least one lowercase letter</li>
-          <li data-rule="number" class="invalid">At least one number</li>
-          <li data-rule="special" class="invalid">At least one special character</li>
-        </ul>
+      <div class="product" data-name="Smart Watch" data-price="2499">
+        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500" alt="Smart Watch">
+        <h3>Smart Watch</h3>
+        <p class="price">₹2,499</p>
+        <button class="add-btn">Add to Cart</button>
       </div>
-      <div class="input-group">
-        <label for="confirmPassword">Confirm Password</label>
-        <input  type="password"   id="confirmPassword"  placeholder="Re-enter your password"  autocomplete="new-password"  />
-        <p id="matchMessage" class="match-message"></p>
+      <div class="product" data-name="Bluetooth Speaker" data-price="999">
+        <img src="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500" alt="Bluetooth Speaker">
+        <h3>Bluetooth Speaker</h3>
+        <p class="price">₹999</p>
+        <button class="add-btn">Add to Cart</button>
       </div>
-      <div class="buttons">
-        <button type="button" id="resetButton" class="reset-btn">
-          Reset
-        </button>
+      <div class="product" data-name="Gaming Mouse" data-price="799">
+        <img src="https://images.unsplash.com/photo-1527814050087-3793815479db?w=500" alt="Gaming Mouse">
+        <h3>Gaming Mouse</h3>
+        <p class="price">₹799</p>
+        <button class="add-btn">Add to Cart</button>
       </div>
-    </form>
+    </section>
+    <section class="cart-section">
+      <h2>Shopping Cart</h2>
+      <ul id="cartItems"></ul>
+      <div class="cart-total">
+        <strong>Total Price: ₹<span id="cartTotal">0</span></strong>
+      </div>
+    </section>
   </main>
+  <footer>
+    <p>© 2026 ShopEase | Frontend Internship Task</p>
+  </footer>
   <script>
-    const passwordInput = document.getElementById("password");
-    const confirmPasswordInput = document.getElementById("confirmPassword");
-    const togglePasswordButton = document.getElementById("togglePassword");
-    const strengthFill = document.getElementById("strengthFill");
-    const strengthMessage = document.getElementById("strengthMessage");
-    const matchMessage = document.getElementById("matchMessage");
-    const resetButton = document.getElementById("resetButton");
-    const requirementItems = document.querySelectorAll("#requirementList li");
-    const rules ={
-      length: {
-        test: (value) => value.length >= 8
-      },
-      uppercase: {
-        test: (value) => /[A-Z]/.test(value)
-      },
-      lowercase: {
-        test: (value) => /[a-z]/.test(value)
-      },
-      number: {
-        test: (value) => /[0-9]/.test(value)
-      },
-      special: {
-        test: (value) => /[^A-Za-z0-9]/.test(value)
+    let cart = [];
+    const cartCount = document.getElementById("cartCount");
+    const cartItems = document.getElementById("cartItems");
+    const cartTotal = document.getElementById("cartTotal");
+    const searchInput = document.getElementById("searchInput");
+    const products = document.querySelectorAll(".product");
+    document.querySelectorAll(".add-btn").forEach(button => {
+      button.addEventListener("click", function () {
+        const product = this.closest(".product");
+        const name = product.dataset.name;
+        const price = Number(product.dataset.price);
+        const existingItem = cart.find(item => item.name === name);
+        if (existingItem){
+          existingItem.quantity++;
+        } else {
+          cart.push({
+            name: name,
+            price: price,
+            quantity: 1
+          });
+        }
+        updateCart();
+      });
+    });
+    function removeFromCart(name){
+      cart = cart.filter(item => item.name !== name);
+      updateCart();
+    }
+    function updateCart(){
+      cartItems.innerHTML = "";
+      let total = 0;
+      let count = 0;
+      cart.forEach(item =>{
+        total += item.price * item.quantity;
+        count += item.quantity;
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <span>${item.name} — ₹${item.price} × ${item.quantity}</span>
+          <button class="remove-btn">Remove</button>
+        `;
+        li.querySelector(".remove-btn").addEventListener("click", function () {
+          removeFromCart(item.name);
+        });
+        cartItems.appendChild(li);
+      });
+      cartCount.textContent = count;
+      cartTotal.textContent = total;
+      if (cart.length === 0){
+        cartItems.innerHTML = "<li>Your cart is empty.</li>";
       }
-    };
-    function updateRequirements(password){
-      let passedCount = 0;
-      requirementItems.forEach((item) =>{
-        const ruleName = item.dataset.rule;
-        const isValid = rules[ruleName].test(password);
-        item.classList.toggle("valid", isValid);
-        item.classList.toggle("invalid", !isValid);
-        if (isValid) {
-          passedCount++;
+    }
+    searchInput.addEventListener("input",function(){
+      const searchText = this.value.toLowerCase();
+      products.forEach(product => {
+        const productName = product.dataset.name.toLowerCase();
+        if (productName.includes(searchText)){
+          product.style.display = "block";
+        } else {
+          product.style.display = "none";
         }
       });
-      return passedCount;
-    }
-    function updateStrength(password){
-      if (password.length === 0) {
-        strengthFill.className = "strength-fill";
-        strengthMessage.textContent = "Please enter a password.";
-        strengthMessage.style.color = "#555";
-        return;
-      }
-      const passedCount = updateRequirements(password);
-      if (passedCount <= 2){
-        strengthFill.className = "strength-fill weak";
-        strengthMessage.textContent = "Weak password";
-        strengthMessage.style.color = "#d9534f";
-      } else if (passedCount <= 4){
-        strengthFill.className = "strength-fill medium";
-        strengthMessage.textContent = "Medium password";
-        strengthMessage.style.color = "#b8860b";
-      } else {
-        strengthFill.className = "strength-fill strong";
-        strengthMessage.textContent = "Strong password";
-        strengthMessage.style.color = "#1a7f37";
-      }
-    }
-    function updatePasswordMatch(){
-      const password = passwordInput.value;
-      const confirmPassword = confirmPasswordInput.value;
-      if (confirmPassword.length === 0) {
-        matchMessage.textContent = "";
-        matchMessage.className = "match-message";
-        return;
-      }
-      if (password === confirmPassword){
-        matchMessage.textContent = "Passwords Match";
-        matchMessage.className = "match-message match";
-      } else {
-        matchMessage.textContent = "Passwords Do Not Match";
-        matchMessage.className = "match-message not-match";
-      }
-    }
-    function togglePasswordVisibility(){
-      const isHidden = passwordInput.type === "password";
-      passwordInput.type = isHidden ? "text" : "password";
-      togglePasswordButton.textContent = isHidden ? "Hide" : "Show";
-      togglePasswordButton.setAttribute(
-        "aria-label",
-        isHidden ? "Hide password" : "Show password"
-      );
-    }
-    function resetForm(){
-      passwordInput.value = "";
-      confirmPasswordInput.value = "";
-      passwordInput.type = "password";
-      togglePasswordButton.textContent = "Show";
-      togglePasswordButton.setAttribute("aria-label", "Show password");
-      strengthFill.className = "strength-fill";
-      strengthMessage.textContent = "Please enter a password.";
-      strengthMessage.style.color = "#555";
-      matchMessage.textContent = "";
-      matchMessage.className = "match-message";
-      requirementItems.forEach((item) => {
-        item.classList.remove("valid");
-        item.classList.add("invalid");
-      });
-    }
-    passwordInput.addEventListener("input", () => {
-      updateStrength(passwordInput.value);
-      updatePasswordMatch();
     });
-    confirmPasswordInput.addEventListener("input", updatePasswordMatch);
-    togglePasswordButton.addEventListener("click", togglePasswordVisibility);
-    resetButton.addEventListener("click", resetForm);
+    updateCart();
   </script>
 </body>
 </html>
