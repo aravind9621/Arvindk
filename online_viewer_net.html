@@ -1,142 +1,173 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Simple Calculator</title>
-  <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-    }
-    body{
-      height:600px;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      background-color:darkslategray;
-    }
-    .calculator{
-      width:320px;
-      background-color:white;
-      padding:15px;
-      border-radius:15px;
-      box-shadow:5px 5px 15px black;
-    }
-    .display{
-      background-color:black;
-      color:white;
-      height:80px;
-      margin-bottom:15px;
-      padding:10px;
-      text-align:right;
-      font-size:28px;
-      overflow:hidden;
-    }
-    .buttons{
-      display:grid;
-      grid-template-columns:repeat(4, 1fr);
-      gap:10px;
-    }
-    button{
-      padding:15px;
-      font-size:18px;
-      border:none;
-      border-radius:10px;
-      cursor:pointer;
-      background-color:lightgray;
-    }
-    .operator{
-      background-color:orange;
-      color:white;
-    }
-    .equals{
-      background-color:green;
-      color:white;
-    }
-    .clear{
-      background-color:red;
-      color:white;
-    }
-    .backspace{
-      background-color:gray;
-      color:white;
-    }
-    .zero{
-      grid-column:span 2;
-    }
-  </style>
+    <title>Weather Dashboard</title>
+     <style>
+body{
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, aquamarine, lightsteelblue);
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.container{
+    background: white;
+    width: 350px;
+    max-width: 85%;
+    padding: 25px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 5px 20px gray;
+}
+h1{
+    color: darkblue;
+    font-size: 25px;
+}
+.search{
+    display: flex;
+    gap: 8px;
+}
+input{
+    width: 60%;
+    min-width: 0;
+    padding: 10px;
+    border: 1px solid darkgray;
+    border-radius: 8px;
+}
+button{
+    background: darkblue;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+button:hover{
+    background: navy;
+}
+.weather-card{
+    margin-top: 20px;
+    padding: 15px;
+    background: aliceblue;
+    border-radius: 15px;
+}
+#icon{
+    font-size: 50px;
+}
+#temperature{
+    font-size: 35px;
+    margin: 10px;
+}
+.details{
+    background: white;
+    padding: 8px;
+    border-radius: 10px;
+}
+#message{
+    color: dimgray;
+    font-size: 14px;
+}
+</style>
 </head>
 <body>
-  <div class="calculator">
-    <div class="display" id="display">0</div>
-    <div class="buttons">
-      <button class="clear" onclick="clearDisplay()">AC</button>
-      <button class="backspace" onclick="backspace()">⌫ cancel</button>
-      <button class="operator" onclick="appendValue('/')">÷</button>
-      <button class="operator" onclick="appendValue('*')">×</button>
-      <button onclick="appendValue('7')">7</button>
-      <button onclick="appendValue('8')">8</button>
-      <button onclick="appendValue('9')">9</button>
-      <button class="operator" onclick="appendValue('-')">−</button>
-      <button onclick="appendValue('4')">4</button>
-      <button onclick="appendValue('5')">5</button>
-      <button onclick="appendValue('6')">6</button>
-      <button class="operator" onclick="appendValue('+')">+</button>
-      <button onclick="appendValue('1')">1</button>
-      <button onclick="appendValue('2')">2</button>
-      <button onclick="appendValue('3')">3</button>
-      <button class="equals" onclick="calculate()">=</button>
-      <button class="zero" onclick="appendValue('0')">0</button>
-      <button onclick="appendValue('.')">.</button>
+    <div class="container">
+        <h1>🌦 Weather Dashboard</h1>
+        <div class="search">
+            <input type="text" id="city"
+                   placeholder="Enter city name">
+            <button onclick="getWeather()">Search</button>
+        </div>
+        <p id="message">Enter a city to check weather</p>
+        <div id="weather" class="weather-card">
+            <h2 id="cityName">City Name</h2>
+            <div id="icon">🌤️</div>
+            <h1 id="temperature">-- °C</h1>
+            <p id="condition">Weather Condition</p>
+            <div class="details">
+                <p>💧 Humidity: <span id="humidity">--</span>%</p>
+                <p>💨 Wind Speed: <span id="wind">--</span> km/h</p>
+            </div>
+        </div>
     </div>
-  </div>
-  <script>
-    let display = document.getElementById("display");
-    let expression = "";
-    function appendValue(value) {
-      if (expression === "" && (value === "+" || value === "-" || value === "*" || value === "/")){
+    <script> 
+async function getWeather(){
+    const city = document.getElementById("city").value.trim();
+    const message = document.getElementById("message");
+    if (city === ""){
+        message.textContent = "Please enter a city name!";
         return;
-      }
-      if (value === "." && expression.includes(".")){
-        let lastPart = expression.split(/[^0-9.]/).pop();
-        if (lastPart.includes(".")){
-          return;
-        }
-      }
-      expression += value;
-      display.innerText = expression;
     }
-    function calculate() {
-      if (expression === "") {
-        return;
-      }
-      try {
-        let result = eval(expression);
+    message.textContent = "Loading weather...";
+    try{
+        const geoURL =
+            "https://geocoding-api.open-meteo.com/v1/search?name=" +
+            encodeURIComponent(city) + "&count=1&language=en&format=json";
+        const geoResponse = await fetch(geoURL);
+        const geoData = await geoResponse.json();
+        if (!geoData.results || geoData.results.length === 0){
+            message.textContent = "City not found. Try another city.";
+            return;
+        }
+        const place = geoData.results[0];
+        const weatherURL = "https://api.open-meteo.com/v1/forecast" + "?latitude=" + latitude + "&longitude=" + longitude + "&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m" + "&daily=weather_code,temperature_2m_max,temperature_2m_min" + "&timezone=auto&forecast_days=4";
+        const weatherResponse = await fetch(weatherURL);
+        const data = await weatherResponse.json();
+        if (!data.current){
+            throw new Error("Weather data unavailable");
+        }
+        const current = data.current;
+        const code = current.weather_code;
+        let condition = "Cloudy";
+        let icon = "☁️";
+        if (code === 0){
+            condition = "Sunny";
+            icon = "☀️";
+        } else if ([1, 2].includes(code)){
+            condition = "Partly Cloudy";
+            icon = "🌤️";
+        } else if (code === 3){
+            condition = "Overcast";
+            icon = "☁️";
+        } else if ([45, 48].includes(code)){
+            condition = "Foggy";
+            icon = "🌫️";
+        } else if (code >= 51 && code <= 67 ||
+                   code >= 80 && code <= 82){
+            condition = "Rainy";
+            icon = "🌧️";
+        } else if (code >= 71 && code <= 77 ||
+                   code >= 85 && code <= 86){
+            condition = "Snowy";
+            icon = "❄️";
+        } else if (code >= 95){
+            condition = "Thunderstorm";
+            icon = "⛈️";
+        }
+        document.getElementById("cityName").textContent =
+            place.name + (place.country ? ", " + place.country : "");
+        document.getElementById("temperature").textContent =
+            current.temperature_2m + " °C";
+        document.getElementById("condition").textContent = condition;
+        document.getElementById("icon").textContent = icon;
 
-        if (result === Infinity || result === -Infinity){
-          display.innerText = "Cannot divide by zero";
-          expression = "";
-          return;
-        }
-        display.innerText = result;
-        expression = result.toString();
-      } catch (error) {
-        display.innerText = "Error";
-        expression = "";
-      }
+        document.getElementById("humidity").textContent =
+            current.relative_humidity_2m;
+
+        document.getElementById("wind").textContent =
+            current.wind_speed_10m;
+        message.textContent = "Weather details updated successfully!";
+    } catch (error){
+        message.textContent =
+            "Unable to get weather. Check your internet and try again.";
     }
-    function clearDisplay(){
-      expression = "";
-      display.innerText = "0";
+}
+document.getElementById("city").addEventListener("keydown", function(event){
+    if (event.key === "Enter"){
+        getWeather();
     }
-    function backspace(){
-      expression = expression.slice(0, -1);
-      if (expression === ""){
-        display.innerText = "0";
-      } else {
-        display.innerText = expression;
-      }
-    }
-  </script>
+})
+    </script>
 </body>
 </html>
