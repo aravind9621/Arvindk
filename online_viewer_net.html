@@ -1,173 +1,165 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Weather Dashboard</title>
-     <style>
-body{
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, aquamarine, lightsteelblue);
-    margin: 0;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.container{
-    background: white;
-    width: 350px;
-    max-width: 85%;
-    padding: 25px;
-    border-radius: 20px;
-    text-align: center;
-    box-shadow: 0 5px 20px gray;
-}
-h1{
-    color: darkblue;
-    font-size: 25px;
-}
-.search{
-    display: flex;
-    gap: 8px;
-}
-input{
-    width: 60%;
-    min-width: 0;
-    padding: 10px;
-    border: 1px solid darkgray;
-    border-radius: 8px;
-}
-button{
-    background: darkblue;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 8px;
-    cursor: pointer;
-}
-button:hover{
-    background: navy;
-}
-.weather-card{
-    margin-top: 20px;
-    padding: 15px;
-    background: aliceblue;
-    border-radius: 15px;
-}
-#icon{
-    font-size: 50px;
-}
-#temperature{
-    font-size: 35px;
-    margin: 10px;
-}
-.details{
-    background: white;
-    padding: 8px;
-    border-radius: 10px;
-}
-#message{
-    color: dimgray;
-    font-size: 14px;
-}
-</style>
+  <title>Live Character Counter</title>
+  <style>
+    *{
+      box-sizing: border-box;
+    }
+    body{
+      margin: 0;
+      min-height: 400px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background-color: aliceblue;
+      color: midnightblue;
+    }
+    .container{
+      width: 100%;
+      max-width: 500px;
+      padding: 30px;
+      background-color: white;
+      border: 1px solid lightblue;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px lightgray;
+    }
+    h1{
+      margin-top: 0;
+      text-align: center;
+      color: royalblue;
+      font-size: 28px;
+    }
+    .description{
+      text-align: center;
+      color: dimgray;
+      line-height: 1.5;
+    }
+    label{
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    textarea{
+      width: 100%;
+      min-height: 160px;
+      padding: 15px;
+      border: 2px solid lightblue;
+      border-radius: 10px;
+      font: inherit;
+      resize: vertical;
+    }
+    textarea:focus{
+      outline: 2px solid royalblue;
+      outline-offset: 2px;
+    }
+    .stats{
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .stats p{
+      margin: 0;
+    }
+    #characterCounter{
+      color: green;
+      font-weight: bold;
+    }
+    #characterCounter.near-limit{
+      color: darkorange;
+    }
+    #characterCounter.at-limit{
+      color: red;
+    }
+    .remaining{
+      color: dimgray;
+    }
+    #warning{
+      min-height: 24px;
+      margin: 15px 0;
+      color: red;
+      font-weight: bold;
+    }
+    button{
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background-color: royalblue;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:focus-visible {
+      outline: 3px solid orange;
+      outline-offset: 3px;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🌦 Weather Dashboard</h1>
-        <div class="search">
-            <input type="text" id="city"
-                   placeholder="Enter city name">
-            <button onclick="getWeather()">Search</button>
-        </div>
-        <p id="message">Enter a city to check weather</p>
-        <div id="weather" class="weather-card">
-            <h2 id="cityName">City Name</h2>
-            <div id="icon">🌤️</div>
-            <h1 id="temperature">-- °C</h1>
-            <p id="condition">Weather Condition</p>
-            <div class="details">
-                <p>💧 Humidity: <span id="humidity">--</span>%</p>
-                <p>💨 Wind Speed: <span id="wind">--</span> km/h</p>
-            </div>
-        </div>
+  <main class="container">
+    <h1>Live Character Counter</h1>
+    <p class="description">
+      Type your message below. Maximum limit: 100 characters.
+    </p>
+    <label for="textInput">Your message</label>
+    <textarea id="textInput" maxlength="100" placeholder="Start typing here..." aria-describedby="remainingText warning"></textarea>
+    <div class="stats">
+      <p id="characterCounter">
+        Characters: <span id="characterCount">0</span> / 100
+      </p>
+      <p>
+        Words:
+        <span id="wordCount">0</span>
+      </p>
     </div>
-    <script> 
-async function getWeather(){
-    const city = document.getElementById("city").value.trim();
-    const message = document.getElementById("message");
-    if (city === ""){
-        message.textContent = "Please enter a city name!";
-        return;
+    <p id="remainingText" class="remaining">
+      Remaining characters: <span id="remainingCount">100</span>
+    </p>
+    <p id="warning" role="status" aria-live="polite"></p>
+    <button id="clearButton" type="button">Clear Text</button>
+  </main>
+  <script>
+    const textInput = document.getElementById("textInput");
+    const characterCount = document.getElementById("characterCount");
+    const wordCount = document.getElementById("wordCount");
+    const remainingCount = document.getElementById("remainingCount");
+    const characterCounter = document.getElementById("characterCounter");
+    const warning = document.getElementById("warning");
+    const clearButton = document.getElementById("clearButton");
+    const maxCharacters = 100;
+    function updateCounts() {
+      const text = textInput.value;
+      const characters = text.length;
+      const trimmedText = text.trim();
+      const words = trimmedText === "" ? 0 : trimmedText.split(/\s+/).length;
+      const remaining = maxCharacters - characters;
+      characterCount.textContent = characters;
+      wordCount.textContent = words;
+      remainingCount.textContent = remaining;
+      characterCounter.classList.toggle(
+        "near-limit",  characters >= 80 && characters < maxCharacters
+      );
+      characterCounter.classList.toggle( "at-limit", characters >= maxCharacters
+      );
+      if(characters >= maxCharacters){ warning.textContent = "You have reached the 100-character limit!";
+      } 
+      else if(characters >= 80){warning.textContent = "You are getting close to the character limit.";
+      } 
+      else { warning.textContent = "";
+      }
     }
-    message.textContent = "Loading weather...";
-    try{
-        const geoURL =
-            "https://geocoding-api.open-meteo.com/v1/search?name=" +
-            encodeURIComponent(city) + "&count=1&language=en&format=json";
-        const geoResponse = await fetch(geoURL);
-        const geoData = await geoResponse.json();
-        if (!geoData.results || geoData.results.length === 0){
-            message.textContent = "City not found. Try another city.";
-            return;
-        }
-        const place = geoData.results[0];
-        const weatherURL = "https://api.open-meteo.com/v1/forecast" + "?latitude=" + latitude + "&longitude=" + longitude + "&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m" + "&daily=weather_code,temperature_2m_max,temperature_2m_min" + "&timezone=auto&forecast_days=4";
-        const weatherResponse = await fetch(weatherURL);
-        const data = await weatherResponse.json();
-        if (!data.current){
-            throw new Error("Weather data unavailable");
-        }
-        const current = data.current;
-        const code = current.weather_code;
-        let condition = "Cloudy";
-        let icon = "☁️";
-        if (code === 0){
-            condition = "Sunny";
-            icon = "☀️";
-        } else if ([1, 2].includes(code)){
-            condition = "Partly Cloudy";
-            icon = "🌤️";
-        } else if (code === 3){
-            condition = "Overcast";
-            icon = "☁️";
-        } else if ([45, 48].includes(code)){
-            condition = "Foggy";
-            icon = "🌫️";
-        } else if (code >= 51 && code <= 67 ||
-                   code >= 80 && code <= 82){
-            condition = "Rainy";
-            icon = "🌧️";
-        } else if (code >= 71 && code <= 77 ||
-                   code >= 85 && code <= 86){
-            condition = "Snowy";
-            icon = "❄️";
-        } else if (code >= 95){
-            condition = "Thunderstorm";
-            icon = "⛈️";
-        }
-        document.getElementById("cityName").textContent =
-            place.name + (place.country ? ", " + place.country : "");
-        document.getElementById("temperature").textContent =
-            current.temperature_2m + " °C";
-        document.getElementById("condition").textContent = condition;
-        document.getElementById("icon").textContent = icon;
-
-        document.getElementById("humidity").textContent =
-            current.relative_humidity_2m;
-
-        document.getElementById("wind").textContent =
-            current.wind_speed_10m;
-        message.textContent = "Weather details updated successfully!";
-    } catch (error){
-        message.textContent =
-            "Unable to get weather. Check your internet and try again.";
-    }
-}
-document.getElementById("city").addEventListener("keydown", function(event){
-    if (event.key === "Enter"){
-        getWeather();
-    }
-})
-    </script>
+    textInput.addEventListener("input", updateCounts);
+    clearButton.addEventListener("click", function () {
+      textInput.value = "";
+      updateCounts();
+      textInput.focus();
+    });
+    updateCounts();
+  </script>
 </body>
 </html>
