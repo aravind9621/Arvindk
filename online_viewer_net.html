@@ -1,165 +1,336 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Live Character Counter</title>
+  <title>Daily Expense Tracker</title>
   <style>
-    *{
-      box-sizing: border-box;
-    }
     body{
-      margin: 0;
-      min-height: 400px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
       font-family: Arial, sans-serif;
-      background-color: aliceblue;
-      color: midnightblue;
+      background-color: LightSteelBlue;
+      margin: 0;
+      padding: 20px;
     }
     .container{
-      width: 100%;
-      max-width: 500px;
-      padding: 30px;
-      background-color: white;
-      border: 1px solid lightblue;
-      border-radius: 15px;
-      box-shadow: 0 8px 20px lightgray;
+      max-width: 700px;
+      margin: auto;
+      background-color: White;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
     h1{
-      margin-top: 0;
       text-align: center;
-      color: royalblue;
-      font-size: 28px;
+      color: MidnightBlue;
     }
-    .description{
-      text-align: center;
-      color: dimgray;
-      line-height: 1.5;
-    }
-    label{
-      display: block;
-      margin-bottom: 10px;
-      font-weight: bold;
-    }
-    textarea{
-      width: 100%;
-      min-height: 160px;
-      padding: 15px;
-      border: 2px solid lightblue;
-      border-radius: 10px;
-      font: inherit;
-      resize: vertical;
-    }
-    textarea:focus{
-      outline: 2px solid royalblue;
-      outline-offset: 2px;
-    }
-    .stats{
+    form{
       display: flex;
       flex-wrap: wrap;
-      justify-content: space-between;
       gap: 10px;
-      margin-top: 15px;
+      margin-bottom: 20px;
     }
-    .stats p{
-      margin: 0;
-    }
-    #characterCounter{
-      color: green;
-      font-weight: bold;
-    }
-    #characterCounter.near-limit{
-      color: darkorange;
-    }
-    #characterCounter.at-limit{
-      color: red;
-    }
-    .remaining{
-      color: dimgray;
-    }
-    #warning{
-      min-height: 24px;
-      margin: 15px 0;
-      color: red;
-      font-weight: bold;
+    input,
+    select{
+      padding: 10px;
+      border: 2px solid LightGray;
+      border-radius: 8px;
+      font-size: 15px;
+      flex: 1;
+      min-width: 130px;
     }
     button{
-      width: 100%;
-      padding: 12px;
+      padding: 10px 18px;
       border: none;
       border-radius: 8px;
-      background-color: royalblue;
-      color: white;
-      font-size: 16px;
+      font-size: 15px;
       cursor: pointer;
+      color: White;
+      background-color: RoyalBlue;
     }
-    button:focus-visible {
-      outline: 3px solid orange;
-      outline-offset: 3px;
+    .delete-btn{
+      background-color: Crimson;
+      padding: 6px 12px;
+    }
+    .summary{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .summary div{
+      flex: 1;
+      background-color: AliceBlue;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      border: 2px solid LightSkyBlue;
+    }
+    .summary h3{
+      margin: 0;
+      color: DarkSlateBlue;
+    }
+    .summary p{
+      margin: 5px 0 0;
+      font-size: 18px;
+      font-weight: bold;
+      color: Black;
+    }
+    .filters{
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    .filters select{
+      flex: 1;
+    }
+    ul{
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: Honeydew;
+      border-left: 6px solid MediumSeaGreen;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+    }
+
+    .expense-details {
+      flex: 1;
+    }
+
+    .expense-name {
+      font-weight: bold;
+      color: DarkGreen;
+    }
+
+    .expense-category {
+      font-size: 13px;
+      color: DimGray;
+    }
+
+    .expense-amount {
+      font-weight: bold;
+      color: DarkSlateGray;
+      margin-right: 10px;
+    }
+
+    .empty {
+      text-align: center;
+      color: Gray;
+      padding: 15px;
     }
   </style>
 </head>
+
 <body>
-  <main class="container">
-    <h1>Live Character Counter</h1>
-    <p class="description">
-      Type your message below. Maximum limit: 100 characters.
-    </p>
-    <label for="textInput">Your message</label>
-    <textarea id="textInput" maxlength="100" placeholder="Start typing here..." aria-describedby="remainingText warning"></textarea>
-    <div class="stats">
-      <p id="characterCounter">
-        Characters: <span id="characterCount">0</span> / 100
-      </p>
-      <p>
-        Words:
-        <span id="wordCount">0</span>
-      </p>
+  <div class="container">
+    <h1>Daily Expense Tracker</h1>
+
+    <!-- Add Expense Form -->
+    <form id="expense-form">
+      <input
+        type="text"
+        id="expense-name"
+        placeholder="Expense name"
+        required
+      />
+
+      <input
+        type="number"
+        id="expense-amount"
+        placeholder="Amount"
+        min="1"
+        step="0.01"
+        required
+      />
+
+      <select id="expense-category" required>
+        <option value="Food">Food</option>
+        <option value="Travel">Travel</option>
+        <option value="Shopping">Shopping</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <button type="submit">Add Expense</button>
+    </form>
+
+    <!-- Budget -->
+    <form id="budget-form">
+      <input
+        type="number"
+        id="monthly-budget"
+        placeholder="Monthly budget"
+        min="0"
+        step="0.01"
+      />
+      <button type="submit">Set Budget</button>
+    </form>
+
+    <!-- Summary -->
+    <div class="summary">
+      <div>
+        <h3>Total Expenses</h3>
+        <p id="total-expenses">₹0.00</p>
+      </div>
+
+      <div>
+        <h3>Highest Expense</h3>
+        <p id="highest-expense">₹0.00</p>
+      </div>
+
+      <div>
+        <h3>Remaining Balance</h3>
+        <p id="remaining-balance">₹0.00</p>
+      </div>
     </div>
-    <p id="remainingText" class="remaining">
-      Remaining characters: <span id="remainingCount">100</span>
-    </p>
-    <p id="warning" role="status" aria-live="polite"></p>
-    <button id="clearButton" type="button">Clear Text</button>
-  </main>
+
+    <!-- Filter -->
+    <div class="filters">
+      <select id="category-filter">
+        <option value="All">All Categories</option>
+        <option value="Food">Food</option>
+        <option value="Travel">Travel</option>
+        <option value="Shopping">Shopping</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <!-- Expense List -->
+    <ul id="expense-list"></ul>
+  </div>
+
   <script>
-    const textInput = document.getElementById("textInput");
-    const characterCount = document.getElementById("characterCount");
-    const wordCount = document.getElementById("wordCount");
-    const remainingCount = document.getElementById("remainingCount");
-    const characterCounter = document.getElementById("characterCounter");
-    const warning = document.getElementById("warning");
-    const clearButton = document.getElementById("clearButton");
-    const maxCharacters = 100;
-    function updateCounts() {
-      const text = textInput.value;
-      const characters = text.length;
-      const trimmedText = text.trim();
-      const words = trimmedText === "" ? 0 : trimmedText.split(/\s+/).length;
-      const remaining = maxCharacters - characters;
-      characterCount.textContent = characters;
-      wordCount.textContent = words;
-      remainingCount.textContent = remaining;
-      characterCounter.classList.toggle(
-        "near-limit",  characters >= 80 && characters < maxCharacters
+    /* ---------- JavaScript ---------- */
+
+    const expenseForm = document.getElementById("expense-form");
+    const budgetForm = document.getElementById("budget-form");
+
+    const expenseName = document.getElementById("expense-name");
+    const expenseAmount = document.getElementById("expense-amount");
+    const expenseCategory = document.getElementById("expense-category");
+    const monthlyBudget = document.getElementById("monthly-budget");
+
+    const categoryFilter = document.getElementById("category-filter");
+    const expenseList = document.getElementById("expense-list");
+
+    const totalExpenses = document.getElementById("total-expenses");
+    const highestExpense = document.getElementById("highest-expense");
+    const remainingBalance = document.getElementById("remaining-balance");
+
+    let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+    let budget = Number(localStorage.getItem("budget")) || 0;
+
+    monthlyBudget.value = budget || "";
+
+    function saveData() {
+      localStorage.setItem("expenses", JSON.stringify(expenses));
+      localStorage.setItem("budget", budget);
+    }
+
+    function updateSummary() {
+      const total = expenses.reduce(
+        (sum, expense) => sum + Number(expense.amount),
+        0
       );
-      characterCounter.classList.toggle( "at-limit", characters >= maxCharacters
-      );
-      if(characters >= maxCharacters){ warning.textContent = "You have reached the 100-character limit!";
-      } 
-      else if(characters >= 80){warning.textContent = "You are getting close to the character limit.";
-      } 
-      else { warning.textContent = "";
+
+      const highest = expenses.length
+        ? Math.max(...expenses.map((expense) => Number(expense.amount)))
+        : 0;
+
+      totalExpenses.textContent = "₹" + total.toFixed(2);
+      highestExpense.textContent = "₹" + highest.toFixed(2);
+
+      if (budget > 0) {
+        remainingBalance.textContent = "₹" + (budget - total).toFixed(2);
+      } else {
+        remainingBalance.textContent = "Set a budget";
       }
     }
-    textInput.addEventListener("input", updateCounts);
-    clearButton.addEventListener("click", function () {
-      textInput.value = "";
-      updateCounts();
-      textInput.focus();
+
+    function displayExpenses() {
+      expenseList.innerHTML = "";
+
+      const selectedCategory = categoryFilter.value;
+
+      const filteredExpenses =
+        selectedCategory === "All"
+          ? expenses
+          : expenses.filter(
+              (expense) => expense.category === selectedCategory
+            );
+
+      if (filteredExpenses.length === 0) {
+        const emptyMessage = document.createElement("li");
+        emptyMessage.className = "empty";
+        emptyMessage.textContent = "No expenses found.";
+        expenseList.appendChild(emptyMessage);
+        return;
+      }
+
+      filteredExpenses.forEach((expense) => {
+        const listItem = document.createElement("li");
+
+        listItem.innerHTML = `
+          <div class="expense-details">
+            <div class="expense-name">${expense.name}</div>
+            <div class="expense-category">${expense.category}</div>
+          </div>
+          <div class="expense-amount">₹${Number(expense.amount).toFixed(2)}</div>
+          <button class="delete-btn">Delete</button>
+        `;
+
+        listItem
+          .querySelector(".delete-btn")
+          .addEventListener("click", function () {
+            expenses = expenses.filter(
+              (item) => item.id !== expense.id
+            );
+
+            saveData();
+            displayExpenses();
+            updateSummary();
+          });
+
+        expenseList.appendChild(listItem);
+      });
+    }
+
+    expenseForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const newExpense = {
+        id: Date.now(),
+        name: expenseName.value.trim(),
+        amount: Number(expenseAmount.value),
+        category: expenseCategory.value
+      };
+
+      expenses.push(newExpense);
+
+      saveData();
+      displayExpenses();
+      updateSummary();
+
+      expenseName.value = "";
+      expenseAmount.value = "";
+      expenseCategory.value = "Food";
     });
-    updateCounts();
+
+    budgetForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      budget = Number(monthlyBudget.value) || 0;
+
+      saveData();
+      updateSummary();
+    });
+
+    categoryFilter.addEventListener("change", displayExpenses);
+
+    displayExpenses();
+    updateSummary();
   </script>
 </body>
 </html>
